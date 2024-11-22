@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原神天賦アイコンクイズ</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div id="mode-selection" class="card">
+            <h2>モード選択</h2>
+            <label>
+                <input type="radio" name="mode" value="all" checked> 全て
+            </label>
+            <label>
+                <input type="radio" name="mode" value="skill"> 元素スキル
+            </label>
+            <label>
+                <input type="radio" name="mode" value="burst"> 元素爆発
+            </label>
+            <button id="start-button" class="btn">スタート</button>
+        </div>
+        <div id="quiz-container" class="card" style="display: none;">
+            <img id="skill-icon" src="" alt="Skill Icon" class="skill-icon">
+            <div id="choices-container"></div>
+            <div id="result"></div>
+            <div id="progress"></div>
+        </div>
+        <div id="end-screen" class="card" style="display: none;"></div>
+        <button id="back-to-start-button" class="btn">スタートに戻る</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

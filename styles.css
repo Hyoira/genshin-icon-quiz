@@ -89,6 +89,9 @@ body {
 }
 
 .skill-icon {
+    width: 150px; /* 固定サイズ */
+    height: 150px; /* 固定サイズ */
+    object-fit: cover; /* 画像を固定サイズに収める */
     background-color: black;
     padding: 10px;
     border-radius: 8px;

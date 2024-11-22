@@ -22,13 +22,18 @@
             <button id="start-button" class="btn">スタート</button>
         </div>
         <div id="quiz-container" class="card" style="display: none;">
+            <div id="progress-container">
+                <div id="progress-bar">
+                    <div id="progress"></div>
+                </div>
+                <div id="score">正解数: 0</div>
+            </div>
             <img id="skill-icon" src="" alt="Skill Icon" class="skill-icon">
             <div id="choices-container"></div>
-            <div id="result"></div>
-            <div id="progress"></div>
+            <div id="result" class="result"></div>
         </div>
         <div id="end-screen" class="card" style="display: none;"></div>
-        <button id="back-to-start-button" class="btn">スタートに戻る</button>
+        <button id="back-to-start-button" class="btn" style="display: none;">スタートに戻る</button>
     </div>
     <script src="script.js"></script>
 </body>

@@ -1,7 +1,9 @@
 // JSONデータを読み込む
 async function loadData() {
-    const charactersResponse = await fetch('./characters.json');
-    const locResponse = await fetch('./loc.json');
+    // const charactersResponse = await fetch('./characters.json');
+    const charactersResponse = await fetch('https://raw.githubusercontent.com/EnkaNetwork/API-docs/master/store/characters.json');
+    // const locResponse = await fetch('./loc.json');
+    const locResponse = await fetch('https://raw.githubusercontent.com/EnkaNetwork/API-docs/master/store/loc.json');
     const charactersData = await charactersResponse.json();
     const locData = await locResponse.json();
 
@@ -15,9 +17,17 @@ async function loadData() {
 
         Object.keys(skills).forEach(skillId => {
             const skillName = skills[skillId];
+            let skillType = '';
+            if (skillName.includes('Skill_E')) {
+                skillType = '元素爆発';
+            } else if (skillName.includes('UI_Talent_S')) {
+                skillType = '命ノ星座';
+            } else if (skillName.includes('Skill_S')) {
+                skillType = '元素スキル';
+            }
             characters[skillName] = {
                 name: characterName,
-                skillType: skillName.includes('Skill_E') ? '元素爆発' : '元素スキル'
+                skillType: skillType
             };
         });
     });
@@ -25,10 +35,17 @@ async function loadData() {
     // スキル画像データを設定する
     const skillImages = {};
     Object.keys(characters).forEach(skillName => {
-        skillImages[skillName] = `./skills/${skillName}.png`;
+        if (characters[skillName].skillType === '元素スキル') {
+            skillImages[skillName] = `./assets/skills/${skillName}.png`;
+        } else if (characters[skillName].skillType === '元素爆発') {
+            skillImages[skillName] = `./assets/bursts/${skillName}.png`;
+        } else if (characters[skillName].skillType === '命ノ星座') {
+            // 命ノ星座の画像パスを修正（末尾の数字を保持）
+            skillImages[skillName] = `./assets/consts/${skillName}.png`;
+        }
     });
 
-    const excludedCharacters = ['マーヴィカ', '旅人']; // 除外するキャラクター名を部分一致で追加
+    const excludedCharacters = ['マーヴィカ', '旅人', '炎神']; // 除外するキャラクター名を部分一致で追加
 
     document.getElementById('start-button').addEventListener('click', startQuiz);
 
@@ -62,6 +79,7 @@ async function loadData() {
             if (excludedCharacters.some(excluded => character.name.includes(excluded))) return false; // 部分一致で除外キャラクターをフィルタリング
             if (mode === 'skill') return character.skillType === '元素スキル';
             if (mode === 'burst') return character.skillType === '元素爆発';
+            if (mode === 'consts') return character.skillType === '命ノ星座';
             return true; // 'all' モード
         });
 
@@ -117,10 +135,21 @@ async function loadData() {
     function checkAnswer(selectedCharacter, correctCharacter) {
         const result = document.getElementById('result');
         if (selectedCharacter.name === correctCharacter.name) {
-            result.textContent = `正解！ ${correctCharacter.name}の${correctCharacter.skillType}です。`;
+            if (correctCharacter.skillType === '命ノ星座') {
+                // 命ノ星座のレベルを表示
+                const constellationLevel = correctCharacter.skillName.split('_').pop().replace('01', '第1重').replace('02', '第2重').replace('03', '第4重').replace('04', '第6重');
+                result.textContent = `正解！ ${correctCharacter.name}の命ノ星座 ${constellationLevel}です。`;
+            } else {
+                result.textContent = `正解！ ${correctCharacter.name}の${correctCharacter.skillType}です。`;
+            }
             correctCount++;
         } else {
-            result.textContent = `不正解。正解は${correctCharacter.name}の${correctCharacter.skillType}です。`;
+            if (correctCharacter.skillType === '命ノ星座') {
+                const constellationLevel = correctCharacter.skillName.split('_').pop().replace('01', '第1重').replace('02', '第2重').replace('03', '第4重').replace('04', '第6重');
+                result.textContent = `不正解。正解は${correctCharacter.name}の命ノ星座 ${constellationLevel}です。`;
+            } else {
+                result.textContent = `不正解。正解は${correctCharacter.name}の${correctCharacter.skillType}です。`;
+            }
         }
         setTimeout(() => loadQuestion(document.querySelector('input[name="mode"]:checked').value), 2000); // 2秒後に次の問題を読み込む
         updateProgress();

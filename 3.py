@@ -24,44 +24,62 @@ def get_character_data(characters):
         character_name = get_name_from_hash(name_hash, 'ja')
         side_icon_name = char_info.get("SideIconName")
         skills = char_info.get("Skills", {})
+        consts = char_info.get("Consts", [])
         
         character_data.append({
             "id": char_id,
             "name": character_name,
             "side_icon_name": side_icon_name,
-            "skills": skills
+            "skills": skills,
+            "consts": consts
         })
     return character_data
 
 def create_output_dir(output_dir):
     os.makedirs(output_dir, exist_ok=True)
 
-def download_skill_images(character_data, output_dir):
+def download_images(character_data, output_dir, image_type):
     for char in character_data:
-        skills = char['skills']
-        for skill_id, skill_name in skills.items():
-            skill_image_url = f'https://enka.network/ui/{skill_name}.png'
-            
-            # URLが有効かどうかを確認
-            response = requests.get(skill_image_url)
-            if response.status_code == 200:
-                # ファイルを保存
-                with open(os.path.join(output_dir, f'{skill_name}.png'), 'wb') as f:
-                    f.write(response.content)
-                    print(f'Downloaded {skill_name}')
-            else:
-                print(f'Failed to download {skill_image_url}')
+        if image_type == 'skill':
+            skills = char['skills']
+            for skill_id, skill_name in skills.items():
+                if skill_name.startswith('Skill_S_'):
+                    download_image(skill_name, output_dir)
+        elif image_type == 'burst':
+            skills = char['skills']
+            for skill_id, skill_name in skills.items():
+                if skill_name.startswith('Skill_E_'):
+                    download_image(skill_name, output_dir)
+        elif image_type == 'const':
+            consts = char['consts']
+            for const_name in consts:
+                if const_name.startswith('UI_Talent_S_'):
+                    download_image(const_name, output_dir)
+
+def download_image(image_name, output_dir):
+    skill_image_url = f'https://enka.network/ui/{image_name}.png'
+    response = requests.get(skill_image_url)
+    if response.status_code == 200:
+        with open(os.path.join(output_dir, f'{image_name}.png'), 'wb') as f:
+            f.write(response.content)
+            print(f'Downloaded {image_name}')
+    else:
+        print(f'Failed to download {skill_image_url}')
 
 def main(characters):
     character_data = get_character_data(characters)
-    output_dir = './skills'
-    create_output_dir(output_dir)
-    download_skill_images(character_data, output_dir)
-    print("All skill images have been downloaded.")
+    output_dir_skill = './assets/skills'
+    output_dir_burst = './assets/bursts'
+    output_dir_consts = './assets/consts'
+
+    create_output_dir(output_dir_skill)
+    create_output_dir(output_dir_burst)
+    create_output_dir(output_dir_consts)
+
+    download_images(character_data, output_dir_skill, 'skill')
+    download_images(character_data, output_dir_burst, 'burst')
+    download_images(character_data, output_dir_consts, 'const')
 
 if __name__ == "__main__":
-    # 使用例
-    characters = {
-        # キャラクターデータをここに定義
-    }
+    characters = requests.get(json_char).json()  # characters.jsonのデータをここに読み込む
     main(characters)

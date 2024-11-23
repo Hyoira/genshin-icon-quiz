@@ -1,9 +1,9 @@
 // JSONデータを読み込む
 async function loadData() {
-    // const charactersResponse = await fetch('./characters.json');
-    const charactersResponse = await fetch('https://raw.githubusercontent.com/EnkaNetwork/API-docs/master/store/characters.json');
-    // const locResponse = await fetch('./loc.json');
-    const locResponse = await fetch('https://raw.githubusercontent.com/EnkaNetwork/API-docs/master/store/loc.json');
+    const charactersResponse = await fetch('./characters.json');
+    // const charactersResponse = await fetch('https://raw.githubusercontent.com/EnkaNetwork/API-docs/master/store/characters.json');
+    const locResponse = await fetch('./loc.json');
+    // const locResponse = await fetch('https://raw.githubusercontent.com/EnkaNetwork/API-docs/master/store/loc.json');
     const charactersData = await charactersResponse.json();
     const locData = await locResponse.json();
 

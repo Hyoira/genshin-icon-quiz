@@ -2725,34 +2725,6 @@
         "QualityType": "QUALITY_PURPLE",
         "WeaponType": "WEAPON_BOW"
     },
-    "11000046": {
-        "Element": "Ice",
-        "Consts": [
-            "UI_Talent_S_Kaeya_01",
-            "UI_Talent_S_Kaeya_02",
-            "UI_Talent_U_Kaeya_01",
-            "UI_Talent_S_Kaeya_03",
-            "UI_Talent_U_Kaeya_02",
-            "UI_Talent_S_Kaeya_04"
-        ],
-        "SkillOrder": [
-            10073, 10074, 10075
-        ],
-        "Skills": {
-            "10073": "Skill_A_01",
-            "10074": "Skill_S_Kaeya_01",
-            "10075": "Skill_E_Kaeya_01"
-        },
-        "ProudMap": {
-            "10073": 1531,
-            "10074": 1532,
-            "10075": 1539
-        },
-        "NameTextMapHash": 3986000746,
-        "SideIconName": "UI_AvatarIcon_Side_Qin",
-        "QualityType": "QUALITY_PURPLE",
-        "WeaponType": "WEAPON_CLAYMORE"
-    },
     "10000005-503": {
         "Element": "Water",
         "Consts": [
